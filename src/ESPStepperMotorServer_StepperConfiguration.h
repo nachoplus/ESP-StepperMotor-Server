@@ -58,7 +58,7 @@ public:
   ESPStepperMotorServer_StepperConfiguration(const ESPStepperMotorServer_StepperConfiguration &espStepperConfiguration);
   ~ESPStepperMotorServer_StepperConfiguration();
   ESPStepperMotorServer_StepperConfiguration(byte stepIoPin, byte directionIoPin);
-  ESPStepperMotorServer_StepperConfiguration(byte stepIoPin, byte directionIoPin, String displayName, unsigned int stepsPerRev, unsigned int stepsPerMM, unsigned int microsteppingDivisor, unsigned int rpmLimit);
+  ESPStepperMotorServer_StepperConfiguration(byte stepIoPin, byte directionIoPin, byte enableIoPin, String displayName, unsigned int stepsPerRev, unsigned int stepsPerMM, unsigned int microsteppingDivisor, unsigned int rpmLimit);
 
   ESP_FlexyStepper *getFlexyStepper();
 
@@ -92,6 +92,16 @@ public:
   byte getDirectionIoPin();
 
   /**
+   * Get the currently configured IO pin that is used to send the ENABLE signal to the stepper driver
+   */
+  byte getEanbleIoPin();
+
+    /**
+   * Get the currently configured IO pin that is used to send the direction signal to the stepper driver
+   */
+  byte getEnableIoPin();
+
+  /**
    * Get the currently configured IO pin that is used to engage an optional engine/motor brake.
    * Returns ESPServerStepperUnsetIoPinNumber (255) if none is defined
    */
@@ -113,6 +123,11 @@ public:
    * Default is -1, meaning that the brake is never released as long as the engine is stopped.
    */
   long getBrakeReleaseDelayMs();
+
+  /**
+   * Set the IO pin that is used to EANBLE the stepper driver
+   */
+  void setEnableIoPin(byte enablePin);
 
   void setBrakeIoPin(byte, byte);
   void setBrakePinActiveState(byte);
@@ -187,6 +202,7 @@ private:
   byte _stepperIndex = 0;
   byte _stepIoPin = ESPServerStepperUnsetIoPinNumber;
   byte _directionIoPin = ESPServerStepperUnsetIoPinNumber;
+  byte _enableIoPin = ESPServerStepperUnsetIoPinNumber;
   byte _brakeIoPin = ESPServerStepperUnsetIoPinNumber;
   byte _brakePinActiveState = 1; // 1 = active high, 2 = active low
   long _brakeEngageDelayMs = 0;

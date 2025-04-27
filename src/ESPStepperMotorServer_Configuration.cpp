@@ -137,6 +137,7 @@ void ESPStepperMotorServer_Configuration::serializeServerConfiguration(JsonDocum
             nestedStepperConfig["name"] = stepperConfig->getDisplayName();
             nestedStepperConfig["stepPin"] = stepperConfig->getStepIoPin();
             nestedStepperConfig["directionPin"] = stepperConfig->getDirectionIoPin();
+            nestedStepperConfig["enablePin"] = stepperConfig->getEnableIoPin();
             nestedStepperConfig["stepsPerRev"] = stepperConfig->getStepsPerRev();
             nestedStepperConfig["stepsPerMM"] = stepperConfig->getStepsPerMM();
             nestedStepperConfig["microsteppingDivisor"] = stepperConfig->getMicrostepsPerStep();
@@ -308,6 +309,7 @@ bool ESPStepperMotorServer_Configuration::loadConfiguationFromSpiffs(String file
                 ESPStepperMotorServer_StepperConfiguration *stepperConfig = new ESPStepperMotorServer_StepperConfiguration(
                     (stepperConfigEntry["stepPin"] | 255),
                     (stepperConfigEntry["directionPin"] | 255),
+                    (stepperConfigEntry["enablePin"] | 255),
                     ((value) ? value : "undefined"),
                     (stepperConfigEntry["stepsPerRev"] | 200),
                     (stepperConfigEntry["stepsPerMM"] | 100),

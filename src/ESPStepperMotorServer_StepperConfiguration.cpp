@@ -63,16 +63,23 @@ ESPStepperMotorServer_StepperConfiguration::ESPStepperMotorServer_StepperConfigu
     this->_flexyStepper->connectToPins(this->_stepIoPin, this->_directionIoPin);
 }
 
-ESPStepperMotorServer_StepperConfiguration::ESPStepperMotorServer_StepperConfiguration(byte stepIoPin, byte directionIoPin, String displayName, unsigned int stepsPerRev, unsigned int stepsPerMM, unsigned int microsteppingDivisor, unsigned int rpmLimit)
+ESPStepperMotorServer_StepperConfiguration::ESPStepperMotorServer_StepperConfiguration(byte stepIoPin, byte directionIoPin, byte enableIoPin, String displayName, unsigned int stepsPerRev, unsigned int stepsPerMM, unsigned int microsteppingDivisor, unsigned int rpmLimit)
 {
     this->_stepIoPin = stepIoPin;
     this->_directionIoPin = directionIoPin;
+    this->_enableIoPin = enableIoPin;
     this->_microsteppingDivisor = microsteppingDivisor;
     this->_displayName = displayName;
     this->_rpmLimit = rpmLimit;
 
     this->_flexyStepper = new ESP_FlexyStepper();
     this->_flexyStepper->connectToPins(this->_stepIoPin, this->_directionIoPin);
+
+    //Enable pin is optional, so we only set it if it is not the default value
+    if (this->_enableIoPin != ESPServerStepperUnsetIoPinNumber)
+    {
+        this->_flexyStepper->setEnablePin(this->_enableIoPin,ESP_FlexyStepper::ACTIVE_HIGH);
+    }
 
     //we store the value in flexistepper and locally, since flexystepper does not provider getters
     this->_flexyStepper->setStepsPerMillimeter(stepsPerMM * this->_microsteppingDivisor);
@@ -128,6 +135,17 @@ byte ESPStepperMotorServer_StepperConfiguration::getStepIoPin()
 byte ESPStepperMotorServer_StepperConfiguration::getDirectionIoPin()
 {
     return this->_directionIoPin;
+}
+
+byte ESPStepperMotorServer_StepperConfiguration::getEnableIoPin()
+{
+    return this->_enableIoPin;
+}
+//ENABLE 
+void ESPStepperMotorServer_StepperConfiguration::setEnableIoPin(byte enablePin)
+{
+    this->_enableIoPin = enablePin;
+    this->_flexyStepper->setEnablePin(enablePin);
 }
 
 // brake control settings

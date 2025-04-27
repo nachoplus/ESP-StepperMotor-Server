@@ -795,6 +795,7 @@ void ESPStepperMotorServer_RestAPI::populateStepperDetailsToJsonObject(JsonObjec
         stepperDetails["name"] = stepper->getDisplayName();
         stepperDetails["stepPin"] = stepper->getStepIoPin();
         stepperDetails["dirPin"] = stepper->getDirectionIoPin();
+        stepperDetails["enablePin"] = stepper->getEnableIoPin();
 
         stepperDetails["brakePin"] = stepper->getBrakeIoPin();
         stepperDetails["brakePinActiveState"] = stepper->getBrakePinActiveState();
@@ -855,6 +856,7 @@ void ESPStepperMotorServer_RestAPI::handlePostStepperRequest(AsyncWebServerReque
             const char *name = doc["name"];
             int stepPin = doc["stepPin"];
             int dirPin = doc["dirPin"];
+            int enablePin = doc["enablePin"];
             int stepsPerMM = doc["stepsPerMM"];
             int stepsPerRev = doc["stepsPerRev"];
             int microsteppingDivisor = doc["microsteppingDivisor"];
@@ -884,6 +886,7 @@ void ESPStepperMotorServer_RestAPI::handlePostStepperRequest(AsyncWebServerReque
                 {
                     int newId = -1;
                     ESPStepperMotorServer_StepperConfiguration *stepperToAdd = new ESPStepperMotorServer_StepperConfiguration(stepPin, dirPin);
+                    stepperToAdd->setEnableIoPin(enablePin);
                     stepperToAdd->setDisplayName(name);
                     stepperToAdd->setStepsPerMM(stepsPerMM);
                     stepperToAdd->setStepsPerRev(stepsPerRev);

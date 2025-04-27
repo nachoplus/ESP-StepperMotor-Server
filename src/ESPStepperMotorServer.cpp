@@ -293,6 +293,10 @@ int ESPStepperMotorServer::addOrUpdateStepper(ESPStepperMotorServer_StepperConfi
     digitalWrite(stepper->getDirectionIoPin(), LOW);
     pinMode(stepper->getStepIoPin(), OUTPUT);
     digitalWrite(stepper->getStepIoPin(), LOW);
+    if (stepper->getEnableIoPin() >=0) {
+        pinMode(stepper->getEnableIoPin(), OUTPUT);
+        digitalWrite(stepper->getEnableIoPin(), HIGH);   
+    }
     // add stepper to configuration or update existing one
     if (stepperIndex > -1)
     {
